@@ -1,0 +1,37 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Mon Feb 26 07:56:09 IST 2018
+  Author:  rtuta
+  Type: BPEL 1.1 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--><process name="HelloWorldBPEL" targetNamespace="http://xmlns.oracle.com/classApplication/HelloWorld/HelloWorldBPEL" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:client="http://xmlns.oracle.com/classApplication/HelloWorld/HelloWorldBPEL" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://dummy.com/classApplication/HelloWorld/HelloWorldWSDL" xmlns:ns2="http://firstApp/projects/helloworld/schemas" xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc" xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath" xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions" xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue" xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk" xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath" xmlns:bpel2="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" id="BpPrc0">
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <partnerLinks>
+    <partnerLink name="HelloWorldService" partnerLinkType="ns1:HelloWorldService" myRole="WishPort"/>
+  </partnerLinks>
+  <variables>
+    <variable name="InputReceiver_InputVariable" messageType="ns1:requestMessage"/>
+    <variable name="Reply_OutputVariable" messageType="ns1:replyMessage"/>
+  </variables>
+  <sequence name="main" id="BpSeq0">
+    <receive name="InputReceiver" createInstance="yes" partnerLink="HelloWorldService" variable="InputReceiver_InputVariable" portType="ns1:WishPort" operation="Wishing" id="BpRcv0"/>
+    <assign name="Assign1" id="BpAss0">
+      <copy>
+        <from expression="concat(&quot;Hello &quot;,bpws:getVariableData('InputReceiver_InputVariable','inputPart','/ns2:Request/ns2:inputName'),&quot;Good Morning...!&quot;)"/>
+        <to bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0" variable="Reply_OutputVariable" part="outputPart" query="/ns2:Response/ns2:result"/>
+      </copy>
+    </assign>
+    <reply name="Reply" partnerLink="HelloWorldService" variable="Reply_OutputVariable" portType="ns1:WishPort" operation="Wishing" id="BpRpl0"/>
+  </sequence>
+</process>
