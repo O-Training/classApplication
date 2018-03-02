@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+        targetNamespace="http://validation.com/CardValidationSystem/CreditCardBPEL"
+        xmlns="http://www.w3.org/2001/XMLSchema">
+  <element name="request">
+    <complexType>
+      <sequence>
+        <element name="cardDetails">
+          <complexType>
+            <sequence>
+              <element name="CC_NUM" type="integer"/>
+              <element name="order_id" type="integer"/>
+              <element name="customer_id" type="integer"/>
+            </sequence>
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+  <element name="response">
+    <complexType>
+      <sequence>
+        <element name="cardStatus">
+          <complexType>
+            <sequence>
+              <element name="CC_NUM" type="integer"/>
+              <element name="order_id" type="integer"/>
+              <element name="status" type="string"/>
+            </sequence>
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+</schema>
