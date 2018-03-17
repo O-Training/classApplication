@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="BillingSystemBPELProcess"
+     targetNamespace="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:client="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess"
+     xmlns:ns1="http://www.products.com/Inventory/Design"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    >
+    <wsdl:documentation>
+        <abstractWSDL>http://itmtraining:7101/soa-infra/services/default/BillingSystem!1.0/WSDLs/BillingSystemBPELProcess.wsdl</abstractWSDL>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="BillingSystemBPELProcess">
+        <plnk:role name="BillingSystemBPELProcessProvider" portType="client:BillingSystemBPELProcess"/>
+        <plnk:role name="BillingSystemBPELProcessRequester" portType="client:BillingSystemBPELProcessCallback"/>
+    </plnk:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://www.products.com/Inventory/Design" schemaLocation="../Schemas/BillingSystem.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="BillingSystemBPELProcessRequestMessage">
+        <wsdl:part name="payload" element="ns1:InputParameters"/>
+    </wsdl:message>
+    <wsdl:message name="BillingSystemBPELProcessResponseMessage">
+        <wsdl:part name="payload" element="ns1:OutputParameters"/>
+    </wsdl:message>
+    <wsdl:portType name="BillingSystemBPELProcess">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:BillingSystemBPELProcessRequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="BillingSystemBPELProcessCallback">
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="client:BillingSystemBPELProcessResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BillingSystemBPELProcessBinding" type="client:BillingSystemBPELProcess">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="process">
+            <soap:operation style="document" soapAction="process"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="billingsystembpelprocess_client_ep">
+        <wsdl:port name="BillingSystemBPELProcess_pt" binding="client:BillingSystemBPELProcessBinding">
+            <soap:address location="http://itmtraining:7101/soa-infra/services/default/BillingSystem/billingsystembpelprocess_client_ep"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

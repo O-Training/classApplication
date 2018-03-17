@@ -1,0 +1,52 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.products.com/Inventory/Design"
+     targetNamespace="http://www.products.com/Inventory/Design" elementFormDefault="qualified">
+    <xsd:element name="InputParameters">
+        <xsd:annotation>
+            <xsd:documentation>A sample element</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Product_Info">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Order_ID" type="xsd:int"/>
+                            <xsd:element name="Cust_ID" type="xsd:int"/>
+                            <xsd:element name="Item" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Item_Name" type="xsd:string"/>
+                                        <xsd:element name="Item_Cost" type="xsd:int"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="OutputParameters">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Bill_Info">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Order_ID" type="xsd:int"/>
+                            <xsd:element name="Cust_ID" type="xsd:int"/>
+                            <xsd:element name="Item" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Item_Name" type="xsd:string"/>
+                                        <xsd:element name="Item_Cost" type="xsd:int"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Total_Cost" type="xsd:int"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

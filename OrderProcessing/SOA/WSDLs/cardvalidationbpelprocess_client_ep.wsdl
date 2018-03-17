@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="CardValidationBPELProcess"
+     targetNamespace="http://xmlns.oracle.com/Ankit_Assigment_App/CardValidation/CardValidationBPELProcess"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:client="http://xmlns.oracle.com/Ankit_Assigment_App/CardValidation/CardValidationBPELProcess"
+     xmlns:ns1="http://http://validation.com/CardValidationSystem"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    >
+    <wsdl:documentation>
+        <abstractWSDL>http://itmtraining:7101/soa-infra/services/default/CardValidation!1.0/WSDLs/CardValidationBPELProcess.wsdl</abstractWSDL>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="CardValidationBPELProcess">
+        <plnk:role name="CardValidationBPELProcessProvider">
+            <plnk:portType name="client:CardValidationBPELProcess"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://http://validation.com/CardValidationSystem" schemaLocation="../Schemas/CardValidation.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="CardValidationBPELProcessRequestMessage">
+        <wsdl:part name="payload" element="ns1:InputParameters"/>
+    </wsdl:message>
+    <wsdl:message name="CardValidationBPELProcessResponseMessage">
+        <wsdl:part name="payload" element="ns1:OutputParameters"/>
+    </wsdl:message>
+    <wsdl:portType name="CardValidationBPELProcess">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:CardValidationBPELProcessRequestMessage"/>
+            <wsdl:output message="client:CardValidationBPELProcessResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CardValidationBPELProcessBinding" type="client:CardValidationBPELProcess">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="process">
+            <soap:operation style="document" soapAction="process"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="cardvalidationbpelprocess_client_ep">
+        <wsdl:port name="CardValidationBPELProcess_pt" binding="client:CardValidationBPELProcessBinding">
+            <soap:address location="http://itmtraining:7101/soa-infra/services/default/CardValidation/cardvalidationbpelprocess_client_ep"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

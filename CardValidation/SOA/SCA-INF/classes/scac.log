@@ -1,0 +1,32 @@
+2018-03-13 07:12:06.574/2.625 Oracle Coherence 12.2.1.0.0 <Info> (thread=main, member=n/a): Loaded operational configuration from "jar:file:/E:/oracle/soa12c/coherence/lib/coherence.jar!/tangosol-coherence.xml"
+2018-03-13 07:12:06.664/2.716 Oracle Coherence 12.2.1.0.0 <Info> (thread=main, member=n/a): Loaded operational overrides from "jar:file:/E:/oracle/soa12c/coherence/lib/coherence.jar!/tangosol-coherence-override-dev.xml"
+2018-03-13 07:12:06.667/2.718 Oracle Coherence 12.2.1.0.0 <D5> (thread=main, member=n/a): Optional configuration override "/tangosol-coherence-override.xml" is not specified
+2018-03-13 07:12:06.670/2.722 Oracle Coherence 12.2.1.0.0 <D5> (thread=main, member=n/a): Optional configuration override "cache-factory-config.xml" is not specified
+2018-03-13 07:12:06.672/2.724 Oracle Coherence 12.2.1.0.0 <D5> (thread=main, member=n/a): Optional configuration override "cache-factory-builder-config.xml" is not specified
+2018-03-13 07:12:06.674/2.726 Oracle Coherence 12.2.1.0.0 <D5> (thread=main, member=n/a): Optional configuration override "/custom-mbeans.xml" is not specified
+
+Oracle Coherence Version 12.2.1.0.0 Build 60603
+ Grid Edition: Development mode
+Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
+
+2018-03-13 07:12:06.815/2.867 Oracle Coherence GE 12.2.1.0.0 <Info> (thread=main, member=n/a): Loaded FMW commons version: 12.2.1-0-0-SNAPSHOT b60603
+2018-03-13 07:12:06.822/2.874 Oracle Coherence GE 12.2.1.0.0 <Info> (thread=main, member=n/a): Created cache factory com.tangosol.net.DefaultConfigurableCacheFactory
+2018-03-13 07:12:07.366/3.417 Oracle Coherence GE 12.2.1.0.0 <Info> (thread=main, member=n/a): The cluster name has not been configured, a value of "Ankit's cluster" has been automatically generated
+Mar 13, 2018 7:12:08 AM oracle.soa.scac.ValidateComposite loadWSDLs
+WARNING: Validating WSDLs from WSDLManager....  with option UseSoaInfraMds:false
+Mar 13, 2018 7:12:08 AM oracle.fabric.common.wsdl.SchemaManager isIncrementalBuildSupported
+INFO: XMLSchema incremental build enabled.
+Mar 13, 2018 7:12:08 AM com.collaxa.cube.CubeLogger info
+INFO: validating "BPEL/CardValidationBPELProcess.bpel" ...
+Mar 13, 2018 7:12:08 AM oracle.integration.platform.blocks.PlatformConfigurationProvider getPlatformConfigurationProvider
+WARNING: JRF is unable to determine the current application server platform.
+Mar 13, 2018 7:12:09 AM com.collaxa.cube.CubeLogger info
+INFO: Composed "CardValidationBPELProcess" in 206.8 milliseconds [nodes 9=0+9, 43.5 nodes/sec]
+Mar 13, 2018 7:12:11 AM com.collaxa.cube.CubeLogger info
+INFO: Compiled "CardValidationBPELProcess" in 1.869 seconds
+Mar 13, 2018 7:12:11 AM com.collaxa.cube.CubeLogger info
+INFO: Gathered 4 files in 1.7 milliseconds
+Mar 13, 2018 7:12:11 AM com.collaxa.cube.CubeLogger info
+INFO: Packaged "CardValidationBPELProcess" in 43.8 milliseconds
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=32m; support was removed in 8.0
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="OrderProcessingBPELProcess"
+             targetNamespace="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:client="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess"
+             xmlns:ns1="http://www.orderProcess.com/orderdetails"
+             xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	TYPE DEFINITION - List of services participating in this BPEL process
+	The default output of the BPEL designer uses strings as input and 
+	output to the BPEL Process. But you can define or import any XML 
+	Schema type and use them as part of the message types.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->   
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://www.orderProcess.com/orderdetails" schemaLocation="../Schemas/OrderProcessing.xsd" />
+		</schema>
+	</wsdl:types>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	MESSAGE TYPE DEFINITION - Definition of the message types used as 
+	part of the port type defintions
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->      
+	<wsdl:message name="OrderProcessingBPELProcessRequestMessage">
+		<wsdl:part name="payload" element="ns1:InputParameters" />
+	</wsdl:message>
+
+	<wsdl:message name="OrderProcessingBPELProcessResponseMessage">
+		<wsdl:part name="payload" element="ns1:OutputParameters" />
+	</wsdl:message>
+
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	PORT TYPE DEFINITION - A port type groups a set of operations into
+	a logical service unit.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- portType implemented by the OrderProcessingBPELProcess BPEL process -->
+	<wsdl:portType name="OrderProcessingBPELProcess">
+		<wsdl:operation name="process">
+			<wsdl:input message="client:OrderProcessingBPELProcessRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- portType implemented by the requester of OrderProcessingBPELProcess BPEL process
+	for asynchronous callback purposes
+	-->
+	<wsdl:portType name="OrderProcessingBPELProcessCallback">
+		<wsdl:operation name="processResponse">
+			<wsdl:input message="client:OrderProcessingBPELProcessResponseMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	PARTNER LINK TYPE DEFINITION
+	the OrderProcessingBPELProcess partnerLinkType binds the provider and
+	requester portType into an asynchronous conversation.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<plnk:partnerLinkType name="OrderProcessingBPELProcess">
+		<plnk:role name="OrderProcessingBPELProcessProvider" portType="client:OrderProcessingBPELProcess"/>
+		<plnk:role name="OrderProcessingBPELProcessRequester" portType="client:OrderProcessingBPELProcessCallback"/>
+	</plnk:partnerLinkType>
+</wsdl:definitions>
