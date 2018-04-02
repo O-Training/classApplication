@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.rest.org/responseSchema"
+            targetNamespace="http://www.rest.org/responseSchema" elementFormDefault="qualified">
+  <xsd:element name="response">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="sum" type="xsd:integer"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

@@ -1,0 +1,143 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer
+
+  Created: Sat Mar 24 16:39:09 IST 2018
+  Author:  rtuta
+  Type: BPEL 2.0 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="BPELProcess"
+               targetNamespace="http://maths_operations.com/classApplication/R_API/BPELProcess"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://maths_operations.com/classApplication/R_API/BPELProcess"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://Rest_Soap.com/sca/soapservice/classApplication/R_API/SOAPService"
+         xmlns:ns2="http://xmlns.oracle.com/classApplication/R_API/Addition_API"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ns3="http://www.Rest_Soap.org" xmlns:ess="http://xmlns.oracle.com/scheduler"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns4="http://add_rest_api.com/Addition_API_ADD_Operation_response"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!--
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC
+     Set of activities coordinating the flow of messages across the
+     services integrated within this business process
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <import namespace="http://Rest_Soap.com/sca/soapservice/classApplication/R_API/SOAPService"
+          location="../WSDLs/SOAPServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"
+          ui:processWSDL="true"/>
+  <partnerLinks>
+    <partnerLink name="SOAPService" partnerLinkType="ns1:SOAPService" myRole="execute_ptt"/>
+    <partnerLink name="Addition_API" partnerLinkType="ns2:Addition_API" partnerRole="Addition_APIProvider"/>
+  </partnerLinks>
+  <variables>
+    <variable name="Receiver_InputVariable" messageType="ns1:requestMessage"/>
+    <variable name="Reply_OutputVariable" messageType="ns1:replyMessage"/>
+    <variable name="ADD_REST_Invoker_InputVariable" messageType="ns2:ADD_Operation_inputMessage"/>
+    <variable name="ADD_REST_Invoker_OutputVariable" messageType="ns2:ADD_Operation_outputMessage"/>
+  </variables>
+  <sequence name="main">
+    <receive name="Receiver" createInstance="yes" partnerLink="SOAPService" portType="ns1:execute_ptt"
+             operation="execute" variable="Receiver_InputVariable"/>
+    <if name="If1">
+      <documentation>
+        <![CDATA[Addition]]>
+      </documentation>
+      <condition>$Receiver_InputVariable.inputPart/ns3:oper="add"</condition>
+      <scope name="AdditionScope">
+        <sequence name="Sequence1">
+          <assign name="InputAssign">
+            <copy>
+              <from>$Receiver_InputVariable.inputPart/ns3:ip1</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$ADD_REST_Invoker_InputVariable.request/ns3:ip1</to>
+            </copy>
+            <copy>
+              <from>$Receiver_InputVariable.inputPart/ns3:ip2</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$ADD_REST_Invoker_InputVariable.request/ns3:ip2</to>
+            </copy>
+          </assign>
+          <invoke name="ADD_REST_Invoker" partnerLink="Addition_API" portType="ns2:Addition_API_ptt"
+                  operation="ADD_Operation" inputVariable="ADD_REST_Invoker_InputVariable" bpelx:invokeAsDetail="no"
+                  outputVariable="ADD_REST_Invoker_OutputVariable"/>
+          <assign name="OutputAssign">
+            <copy>
+              <from>$ADD_REST_Invoker_OutputVariable.reply/ns4:sum</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Reply_OutputVariable.outputPart/ns3:result</to>
+            </copy>
+          </assign>
+        </sequence>
+      </scope>
+      <elseif>
+        <documentation>
+          <![CDATA[Subtraction]]>
+        </documentation>
+        <condition>$Receiver_InputVariable.inputPart/ns3:oper="subtract"</condition>
+        <scope name="SubtractionScope" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+          <assign name="AssignOutput">
+            <copy>
+              <from>($Receiver_InputVariable.inputPart/ns3:ip1) - ($Receiver_InputVariable.inputPart/ns3:ip2)</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Reply_OutputVariable.outputPart/ns3:result</to>
+            </copy>
+          </assign>
+        </scope></elseif>
+      <elseif>
+        <documentation>
+          <![CDATA[Product]]>
+        </documentation>
+        <condition>$Receiver_InputVariable.inputPart/ns3:oper="product"</condition>
+        <scope name="ProductScope" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"><assign name="AssignOutput"
+                                                                                                            xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      
+   <copy>
+         <from>($Receiver_InputVariable.inputPart/ns3:ip1) * ($Receiver_InputVariable.inputPart/ns3:ip2)</from>
+         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Reply_OutputVariable.outputPart/ns3:result</to>
+      </copy></assign></scope></elseif>
+      <else>
+        <documentation>
+          <![CDATA[Default]]>
+        </documentation><scope name="DefaultScope" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"><scope name="AdditionScope"
+                                                                                                                           xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <sequence name="Sequence1">
+         <assign name="InputAssign">
+            <copy>
+               <from>$Receiver_InputVariable.inputPart/ns3:ip1</from>
+               <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$ADD_REST_Invoker_InputVariable.request/ns3:ip1</to>
+            </copy>
+            <copy>
+               <from>$Receiver_InputVariable.inputPart/ns3:ip2</from>
+               <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$ADD_REST_Invoker_InputVariable.request/ns3:ip2</to>
+            </copy>
+         </assign>
+         <invoke name="ADD_REST_Invoker" partnerLink="Addition_API" portType="ns2:Addition_API_ptt"
+                 operation="ADD_Operation" inputVariable="ADD_REST_Invoker_InputVariable" bpelx:invokeAsDetail="no"
+                 outputVariable="ADD_REST_Invoker_OutputVariable"
+                 xmlns:bpelx="http://schemas.oracle.com/bpel/extension"/>
+         <assign name="OutputAssign">
+            <copy>
+               <from>$ADD_REST_Invoker_OutputVariable.reply/ns4:sum</from>
+               <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Reply_OutputVariable.outputPart/ns3:result</to>
+            </copy>
+         </assign>
+      </sequence>
+   </scope></scope></else>
+    </if>
+    <reply name="Reply" partnerLink="SOAPService" variable="Reply_OutputVariable" portType="ns1:execute_ptt"
+           operation="execute"/>
+  </sequence>
+</process>

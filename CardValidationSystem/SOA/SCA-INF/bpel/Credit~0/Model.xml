@@ -70,7 +70,7 @@
           <sequence name="Invalid_Scope" id="BpSeq2">
             <assign name="Assign" id="BpAss0">
               <copy>
-                <from expression="&quot;INVALID&quot;"/>
+                <from expression="&quot;INVALID&quot;" bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
                 <to bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0" variable="outputVariable" part="payload" query="/client:response/client:cardStatus/client:status"/>
               </copy>
               <copy>
@@ -97,7 +97,7 @@
           <scope name="Valid_Scope" id="BpScp0">
             <assign name="Assign" id="BpAss1">
               <copy>
-                <from expression="&quot;VALID&quot;"/>
+                <from expression="&quot;VALID&quot;" bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
                 <to bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0" variable="outputVariable" part="payload" query="/client:response/client:cardStatus/client:status"/>
               </copy>
               <copy>

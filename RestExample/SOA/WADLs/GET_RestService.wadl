@@ -1,0 +1,38 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://www.rest.org/requestSchema" xmlns="http://wadl.dev.java.net/2009/02" xmlns:ns1="http://www.Student.org">
+   <doc title="GET_RestService">RestService</doc>
+   <grammars>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.rest.org/requestSchema" schemaLocation="../Schemas/Resquest.xsd"/>
+        </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.rest.org/responseSchema" schemaLocation="../Schemas/Response.xsd"/>
+        </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.Student.org" schemaLocation="../Schemas/StudentSchema.xsd"/>
+        </xsd:schema>
+   </grammars>
+   <resources>
+      <resource path="/sum">
+         <method name="GET" soa:wsdlOperation="GET_SUM">
+            <request soa:paramElement="pns:request" xmlns:pns="http://www.rest.org/requestSchema">
+               <param name="inp1" style="query" soa:expression="$msg.request/ns0:inp1" type="xsd:integer"/>
+               <param name="inp2" style="query" soa:expression="$msg.request/ns0:inp2" type="xsd:integer"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/json" element="cns:response" xmlns:cns="http://www.rest.org/responseSchema"/>
+            </response>
+         </method>
+      </resource>
+      <resource path="/marks">
+         <method name="POST" soa:wsdlOperation="STU_MARKS">
+            <request>
+               <representation mediaType="application/json" element="cns:stuRequest" xmlns:cns="http://www.Student.org"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/json" element="cns:stuResponse" xmlns:cns="http://www.Student.org"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>

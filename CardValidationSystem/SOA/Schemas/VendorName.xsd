@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.CCV.org/VendorName"
+            targetNamespace="http://www.CCV.org/VendorName" elementFormDefault="qualified">
+  <xsd:element name="vendorDetails">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="vendor" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

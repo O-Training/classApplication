@@ -24,7 +24,11 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/ResourceBundlesContentSet"/>
    </list>
    <list n="listOfChildren">
+      <hash><url n="URL" path="BillingSystem/BillingSystem.jpr"/></hash>
       <hash><url n="URL" path="CardValidationSystem/CardValidationSystem.jpr"/></hash>
       <hash><url n="URL" path="HelloWorld/HelloWorld.jpr"/></hash>
+      <hash><url n="URL" path="OrderProcessing/OrderProcessing.jpr"/></hash>
+      <hash><url n="URL" path="R_API/R_API.jpr"/></hash>
+      <hash><url n="URL" path="RestExample/RestExample.jpr"/></hash>
    </list>
 </jws:workspace>

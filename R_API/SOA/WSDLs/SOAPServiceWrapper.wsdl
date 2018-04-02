@@ -1,0 +1,16 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+     name="SOAPService"
+     targetNamespace="http://Rest_Soap.com/sca/soapservice/classApplication/R_API/SOAPService"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:tns="http://Rest_Soap.com/sca/soapservice/classApplication/R_API/SOAPService"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+    <plnk:partnerLinkType name="SOAPService">
+        <plnk:role name="execute_ptt" portType="tns:execute_ptt"/>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="http://Rest_Soap.com/sca/soapservice/classApplication/R_API/SOAPService"
+         location="SOAPService.wsdl"/>
+</wsdl:definitions>

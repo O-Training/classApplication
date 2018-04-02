@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<tns:InputParameters xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns1="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:client="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess" xmlns:tns="http://www.products.com/Inventory/Design">
+   <tns:Product_Info>
+      <tns:Order_ID>5</tns:Order_ID>
+      <tns:Cust_ID>3</tns:Cust_ID>
+      <tns:Item>
+         <tns:Item_Name>Item_Name6</tns:Item_Name>
+         <tns:Item_Cost>7</tns:Item_Cost>
+      </tns:Item>
+      <tns:Item>
+         <tns:Item_Name>Item_Name8</tns:Item_Name>
+         <tns:Item_Cost>9</tns:Item_Cost>
+      </tns:Item>
+      <tns:Item>
+         <tns:Item_Name>Item_Name10</tns:Item_Name>
+         <tns:Item_Cost>11</tns:Item_Cost>
+      </tns:Item>
+   </tns:Product_Info>
+</tns:InputParameters>

@@ -1,0 +1,119 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer
+
+  Created: Thu Mar 22 07:50:13 IST 2018
+  Author:  rtuta
+  Type: BPEL 2.0 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="BPELProcess"
+               targetNamespace="http://rest.com/classApplication/RestExample/BPELProcess"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://rest.com/classApplication/RestExample/BPELProcess"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.oracle.com/classApplication/RestExample/GET_RestService"
+         xmlns:ns2="http://www.rest.org/requestSchema"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" 
+         xmlns:ns3="http://www.rest.org/responseSchema"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer" xmlns:ns4="http://www.Student.org">
+
+  <!--
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC
+     Set of activities coordinating the flow of messages across the
+     services integrated within this business process
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <import namespace="http://xmlns.oracle.com/classApplication/RestExample/GET_RestService"
+          location="../WSDLs/GET_RestService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/" ui:processWSDL="true"/>
+  <partnerLinks>
+    <partnerLink name="GET_RestService" partnerLinkType="ns1:GET_RestService" myRole="GET_RestServiceProvider"/>
+  </partnerLinks>
+  <variables>
+    <variable name="Receiver_InputVariable" messageType="ns1:GET_SUM_inputMessage"/>
+    <variable name="Reply_OutputVariable" messageType="ns1:GET_SUM_outputMessage"/>
+    <variable name="STU_MARKS_InputVariable" messageType="ns1:STU_MARKS_inputMessage"/>
+    <variable name="STU_MARKS_OutputVariable" messageType="ns1:STU_MARKS_outputMessage"/>
+  </variables>
+  <sequence name="main">
+    <pick name="PickActivity" createInstance="yes">
+      <onMessage bpelx:name="Addition" partnerLink="GET_RestService" variable="Receiver_InputVariable"
+                 portType="ns1:GET_RestService_ptt" operation="GET_SUM">
+        <scope name="AdditionScope">
+          <sequence>
+            <assign name="Transformation1">
+              <bpelx:annotation>
+                <bpelx:pattern patternName="bpelx:transformation"></bpelx:pattern>
+              </bpelx:annotation>
+              <copy>
+                <from>ora:doXSLTransformForDoc("../Transformations/Transformation.xsl", $Receiver_InputVariable.request)</from>
+                <to variable="Reply_OutputVariable" part="reply"/>
+              </copy>
+            </assign>
+            <reply name="Reply" partnerLink="GET_RestService" variable="Reply_OutputVariable"
+                   portType="ns1:GET_RestService_ptt" operation="GET_SUM"/>
+          </sequence>
+        </scope>
+      </onMessage>
+      <onMessage bpelx:name="StuDetails" partnerLink="GET_RestService" variable="STU_MARKS_InputVariable"
+                 portType="ns1:GET_RestService_ptt" operation="STU_MARKS">
+        <sequence name="Sequence2">
+          <scope name="Scope1">
+            <sequence name="Sequence3">
+              <assign name="Assign">
+                <copy>
+                  <from>$STU_MARKS_InputVariable.request/ns4:stuName</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$STU_MARKS_OutputVariable.reply/ns4:stuName</to>
+                </copy>
+                <copy>
+                  <from>$STU_MARKS_InputVariable.request/ns4:stuNum</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$STU_MARKS_OutputVariable.reply/ns4:stuNum</to>
+                </copy>
+                <copy>
+                  <from>$STU_MARKS_InputVariable.request/ns4:marks/ns4:eng+ $STU_MARKS_InputVariable.request/ns4:marks/ns4:hindi</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$STU_MARKS_OutputVariable.reply/ns4:totalMarks</to>
+                </copy>
+              </assign>
+              <if name="If1">
+                <documentation>
+                  <![CDATA[Pass]]>
+                </documentation>
+                <condition>($STU_MARKS_InputVariable.request/ns4:marks/ns4:eng+$STU_MARKS_InputVariable.request/ns4:marks/ns4:hindi)&gt;=34</condition>
+                <assign name="Assign1">
+                  <copy>
+                    <from>"PASS"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$STU_MARKS_OutputVariable.reply/ns4:result</to>
+                  </copy>
+                </assign>
+                <else>
+                  <assign name="Assign1" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                    <copy>
+                      <from>"FAIL"</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$STU_MARKS_OutputVariable.reply/ns4:result</to>
+                    </copy>
+                  </assign>
+                </else>
+              </if>
+              <reply name="StuDetails_Reply" partnerLink="GET_RestService" variable="STU_MARKS_OutputVariable"
+                     portType="ns1:GET_RestService_ptt" operation="STU_MARKS"/>
+            </sequence>
+          </scope>
+        </sequence>
+      </onMessage>
+    </pick>
+  </sequence>
+</process>

@@ -1,0 +1,25 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://www.Rest_Soap.org" xmlns="http://wadl.dev.java.net/2009/02">
+   <doc title="Addition_API">RestReference</doc>
+   <grammars>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.Rest_Soap.org" schemaLocation="../Schemas/Schema.xsd"/>
+        </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://add_rest_api.com/Addition_API_ADD_Operation_response" schemaLocation="../Schemas/ADD_REST_Schema.xsd"/>
+        </xsd:schema>
+   </grammars>
+   <resources>
+      <resource path="/soa-infra/resources/default/RestExample!1.0/GET_RestService/sum">
+         <method name="GET" soa:wsdlOperation="ADD_Operation">
+            <request soa:paramElement="pns:requestSchema" xmlns:pns="http://www.Rest_Soap.org">
+               <param name="inp1" style="query" soa:expression="$msg.request/ns0:ip1" type="xsd:integer"/>
+               <param name="inp2" style="query" soa:expression="$msg.request/ns0:ip2" type="xsd:integer"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/json" element="cns:responseAPI" xmlns:cns="http://add_rest_api.com/Addition_API_ADD_Operation_response"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>

@@ -1,0 +1,197 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sat Mar 10 13:37:39 IST 2018
+  Author:  Ankit
+  Type: BPEL 2.0 Process
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="OrderProcessingBPELProcess"
+         targetNamespace="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:client="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.oracle.com/Ankit_Assigment_App/CardValidation/CardValidationBPELProcess"
+         xmlns:ns2="http://www.Products.com/Ankit_Assigment_App/ProductBilling/ProductBillingBPELProcess"
+         xmlns:ns4="http://http://validation.com/CardValidationSystem"
+         xmlns:ns3="http://www.orderProcess.com/orderdetails"
+         xmlns:ns5="http://www.products.com/Inventory/Design/schema"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns6="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess"
+         xmlns:ns7="http://www.products.com/Inventory/Design"
+         xmlns:ns8="http://validation.com/CardValidationSystem/CreditCardBPEL">
+
+    <import ui:processWSDL="true" namespace="http://www.orderProcess.com/orderdetails/Ankit_Assigment_App/OrderProcessing/OrderProcessingBPELProcess" location="../WSDLs/OrderProcessingBPELProcess.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="orderprocessingbpelprocess_client" partnerLinkType="client:OrderProcessingBPELProcess" myRole="OrderProcessingBPELProcessProvider" partnerRole="OrderProcessingBPELProcessRequester"/>
+        <partnerLink name="ReferenceToBillingSystem" partnerLinkType="ns6:BillingSystemBPELProcess"
+                     partnerRole="BillingSystemBPELProcessProvider" myRole="BillingSystemBPELProcessRequester"/>
+        <partnerLink name="CVS_Reference" partnerLinkType="ns8:CreditCardBPEL" partnerRole="CreditCardBPELProvider"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="inputVariable" messageType="client:OrderProcessingBPELProcessRequestMessage"/>
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="outputVariable" messageType="client:OrderProcessingBPELProcessResponseMessage"/>
+      
+        <variable name="InvokeBillingSystem_process_InputVariable"
+                  messageType="ns6:BillingSystemBPELProcessRequestMessage"/>
+        <variable name="ReceiveBS_processResponse_InputVariable"
+                  messageType="ns6:BillingSystemBPELProcessResponseMessage"/>
+        <variable name="CVS_Invoke_InputVariable" messageType="ns8:CreditCardBPELRequestMessage"/>
+        <variable name="CVS_Invoke_OutputVariable" messageType="ns8:CreditCardBPELResponseMessage"/>
+    </variables>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in OrderProcessingBPELProcess.wsdl) -->
+        <receive name="receiveInput" partnerLink="orderprocessingbpelprocess_client" portType="client:OrderProcessingBPELProcess" operation="process" variable="inputVariable" createInstance="yes"/>
+        <scope name="CVS_Scope">
+            <sequence name="Sequence3">
+                <assign name="Assign1">
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Card_Info/ns3:CC_Number</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$CVS_Invoke_InputVariable.payload/ns8:cardDetails/ns8:CC_NUM</to>
+                    </copy>
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Order_ID</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Order_ID</to>
+                    </copy>
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Order_ID</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$CVS_Invoke_InputVariable.payload/ns8:cardDetails/ns8:order_id</to>
+                    </copy>
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Cust_Info/ns3:Cust_ID</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Cust_ID</to>
+                    </copy>
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Card_Info/ns3:CC_Number</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:CC_Number</to>
+                    </copy>
+                    <copy>
+                        <from>$inputVariable.payload/ns3:OrderDetails/ns3:Cust_Info/ns3:Cust_ID</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$CVS_Invoke_InputVariable.payload/ns8:cardDetails/ns8:customer_id</to>
+                    </copy>
+                </assign>
+                <invoke name="CVS_Invoke" partnerLink="CVS_Reference" portType="ns8:CreditCardBPEL" operation="process"
+                        inputVariable="CVS_Invoke_InputVariable" outputVariable="CVS_Invoke_OutputVariable"
+                        bpelx:invokeAsDetail="no"/>
+            </sequence>
+        </scope>
+        <if name="If3">
+            <documentation>
+                <![CDATA[VALID]]>
+            </documentation>
+            <condition>$CVS_Invoke_OutputVariable.payload/ns8:cardStatus/ns8:status="VALID"</condition>
+            <scope name="BS_Scope">
+                <sequence name="Sequence2">
+                    <assign name="BS_Input">
+                        <bpelx:annotation>
+                            <bpelx:pattern patternName="bpelx:transformation"></bpelx:pattern>
+                        </bpelx:annotation>
+                        <copy>
+                            <from>ora:doXSLTransformForDoc("../Transformations/BS_Input_Transformation.xsl", $inputVariable.payload)</from>
+                            <to variable="InvokeBillingSystem_process_InputVariable" part="payload"/>
+                        </copy>
+                    </assign>
+                    <invoke name="InvokeBillingSystem" bpelx:invokeAsDetail="no" partnerLink="ReferenceToBillingSystem"
+                            portType="ns6:BillingSystemBPELProcess" operation="process"
+                            inputVariable="InvokeBillingSystem_process_InputVariable"/>
+                    <receive name="ReceiveBS" partnerLink="ReferenceToBillingSystem"
+                             portType="ns6:BillingSystemBPELProcessCallback" operation="processResponse"
+                             variable="ReceiveBS_processResponse_InputVariable"/>
+                    <assign name="AssignBSVaild">
+                        <copy>
+                            <from>$ReceiveBS_processResponse_InputVariable.payload/ns7:Bill_Info/ns7:Order_ID</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Order_ID</to>
+                        </copy>
+                        <copy>
+                            <from>"VALID"</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:CC_Status</to>
+                        </copy>
+                        <copy>
+                            <from>$ReceiveBS_processResponse_InputVariable.payload/ns7:Bill_Info/ns7:Cust_ID</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Cust_ID</to>
+                        </copy>
+                        <copy>
+                            <from>$ReceiveBS_processResponse_InputVariable.payload/ns7:Bill_Info/ns7:Total_Cost</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Total_Amount</to>
+                        </copy>
+                        <copy>
+                            <from>'Description: Order has been successfully placed!!'</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Description</to>
+                        </copy>
+                        <copy>
+                            <from>'Order Status: Sucess!!'</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Order_Status</to>
+                        </copy>
+                    </assign>
+                </sequence>
+            </scope>
+            <else>
+                <documentation>
+                    <![CDATA[INVALID]]>
+                </documentation>
+                <assign name="AssignBSInvalid">
+                    <copy>
+                        <from>'Description: Order has not been placed. Please try again'</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Description</to>
+                    </copy>
+                    <copy>
+                        <from>"INVALID"</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:CC_Status</to>
+                    </copy>
+                    <copy>
+                        <from>'Order Status: Invalid'</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns3:OrderResponse/ns3:Order_Status</to>
+                    </copy>
+                </assign>
+            </else>
+        </if>
+        <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+        <invoke name="callbackClient" partnerLink="orderprocessingbpelprocess_client" portType="client:OrderProcessingBPELProcessCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>

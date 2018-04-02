@@ -25,7 +25,7 @@
          xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
          xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
          xmlns:bpel2="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
-         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:ns1="http://www.CCV.org/VendorName">
 
     <!-- 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +61,7 @@
 
     <!-- Reference to the message that will be returned to the requester-->
     <variable name="outputVariable" messageType="client:CreditCardBPELResponseMessage"/>
+    <variable name="VendorName" messageType="client:VendorMessage"/>
   </variables>
 
   <!-- 
@@ -73,9 +74,10 @@
   <sequence name="main">
 
     <!-- Receive input from requestor. (Note: This maps to operation defined in CreditCardBPEL.wsdl) -->
-    <receive name="receiveInput" partnerLink="CCV_Service" portType="client:CreditCardBPEL" operation="process" variable="inputVariable" createInstance="yes"/>
+    <receive name="receiveInput" partnerLink="CCV_Service" portType="client:CreditCardBPEL" operation="process" variable="inputVariable" createInstance="yes"
+             bpelx:headerVariable="VendorName"/>
     <switch name="Switch1">
-      <case condition="bpws:getVariableData('inputVariable','payload','/client:request/client:cardDetails/client:CC_NUM')&lt;5000">
+      <case condition="bpws:getVariableData('inputVariable','payload','/client:request/client:cardDetails/client:CC_NUM')&lt;5000  or (bpws:getVariableData('VendorName','payload','/ns1:vendorDetails/ns1:vendor')!=&quot;VISA&quot;)">
         <bpelx:annotation>
           <bpelx:general>
             <bpelx:property name="userLabel">
@@ -87,7 +89,7 @@
           <sequence name="Invalid_Scope">
             <assign name="Assign">
               <copy>
-                <from expression='"INVALID"'/>
+                <from expression='"INVALID"' bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
                 <to bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0" variable="outputVariable"
                     part="payload" query="/client:response/client:cardStatus/client:status"/>
               </copy>
@@ -107,7 +109,7 @@
           </sequence>
         </sequence>
       </case>
-      <case condition="bpws:getVariableData('inputVariable','payload','/client:request/client:cardDetails/client:CC_NUM')>=5000">
+      <case condition="bpws:getVariableData('inputVariable','payload','/client:request/client:cardDetails/client:CC_NUM')>=5000 and (bpws:getVariableData('VendorName','payload','/ns1:vendorDetails/ns1:vendor')=&quot;VISA&quot;)">
         <bpelx:annotation>
           <bpelx:general>
             <bpelx:property name="userLabel">
@@ -119,7 +121,7 @@
           <scope name="Valid_Scope">
             <assign name="Assign">
               <copy>
-                <from expression='"VALID"'/>
+                <from expression='"VALID"' bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
                 <to bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0" variable="outputVariable"
                     part="payload" query="/client:response/client:cardStatus/client:status"/>
               </copy>

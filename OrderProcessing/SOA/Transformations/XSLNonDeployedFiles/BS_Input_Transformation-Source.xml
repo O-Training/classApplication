@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<InputParameters xmlns="http://www.orderProcess.com/orderdetails">
+   <OrderDetails>
+      <Card_Info>
+         <CC_Number>1</CC_Number>
+         <Vendor>Vendor2</Vendor>
+      </Card_Info>
+      <Cust_Info>
+         <Cust_ID>3</Cust_ID>
+         <Cust_Name>Cust_Name4</Cust_Name>
+      </Cust_Info>
+      <Order_ID>5</Order_ID>
+      <Item_Info>
+         <Item_Name>Item_Name6</Item_Name>
+         <Item_Cost>7</Item_Cost>
+      </Item_Info>
+      <Item_Info>
+         <Item_Name>Item_Name8</Item_Name>
+         <Item_Cost>9</Item_Cost>
+      </Item_Info>
+      <Item_Info>
+         <Item_Name>Item_Name10</Item_Name>
+         <Item_Cost>11</Item_Cost>
+      </Item_Info>
+   </OrderDetails>
+</InputParameters>

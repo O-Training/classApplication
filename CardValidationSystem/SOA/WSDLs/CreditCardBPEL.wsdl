@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="CreditCardBPEL"
-             targetNamespace="http://validation.com/CardValidationSystem/CreditCardBPEL"
-             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:client="http://validation.com/CardValidationSystem/CreditCardBPEL"
-             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<wsdl:definitions name="CreditCardBPEL" targetNamespace="http://validation.com/CardValidationSystem/CreditCardBPEL"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:client="http://validation.com/CardValidationSystem/CreditCardBPEL"
+                  xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+                  xmlns:vd="http://www.CCV.org/VendorName" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	TYPE DEFINITION - List of services participating in this BPEL process
 	The default output of the BPEL designer uses strings as input and 
 	output to the BPEL Process. But you can define or import any XML 
 	Schema type and use them as part of the message types.
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->   
-	<wsdl:types>
-		<schema xmlns="http://www.w3.org/2001/XMLSchema">
-			<import namespace="http://validation.com/CardValidationSystem/CreditCardBPEL"
-           schemaLocation="../Schemas/CreditCardSchema.xsd" />
-		</schema>
-	</wsdl:types>
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+      <import namespace="http://validation.com/CardValidationSystem/CreditCardBPEL"
+              schemaLocation="../Schemas/CreditCardSchema.xsd"/>
+    </schema>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+      <import namespace="http://www.CCV.org/VendorName" schemaLocation="../Schemas/VendorName.xsd"/>
+    </schema>
+  </wsdl:types>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	MESSAGE TYPE DEFINITION - Definition of the message types used as 
 	part of the port type defintions
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->      
-	<wsdl:message name="CreditCardBPELRequestMessage">
-		<wsdl:part name="payload" element="client:request"/>
-	</wsdl:message>
-	<wsdl:message name="CreditCardBPELResponseMessage">
-		<wsdl:part name="payload" element="client:response"/>
-	</wsdl:message>
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <wsdl:message name="CreditCardBPELRequestMessage">
+    <wsdl:part name="payload" element="client:request"/>
+  </wsdl:message>
+  <wsdl:message name="CreditCardBPELResponseMessage">
+    <wsdl:part name="payload" element="client:response"/>
+  </wsdl:message>
+  <wsdl:message name="VendorMessage">
+    <wsdl:part name="payload" element="vd:vendorDetails"/>
+  </wsdl:message>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	PORT TYPE DEFINITION - A port type groups a set of operations into
 	a logical service unit.
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-	<!-- portType implemented by the CreditCardBPEL BPEL process -->
-	<wsdl:portType name="CreditCardBPEL">
-		<wsdl:operation name="process">
-			<wsdl:input  message="client:CreditCardBPELRequestMessage" />
-			<wsdl:output message="client:CreditCardBPELResponseMessage"/>
-		</wsdl:operation>
-	</wsdl:portType>
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  <!-- portType implemented by the CreditCardBPEL BPEL process -->
+  <wsdl:portType name="CreditCardBPEL">
+    <wsdl:operation name="process">
+      <wsdl:input message="client:CreditCardBPELRequestMessage"/>
+      <wsdl:output message="client:CreditCardBPELResponseMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	PARTNER LINK TYPE DEFINITION
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ --> 
-	<plnk:partnerLinkType name="CreditCardBPEL">
-		<plnk:role name="CreditCardBPELProvider">
-			<plnk:portType name="client:CreditCardBPEL"/>
-		</plnk:role>
-	</plnk:partnerLinkType>
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <plnk:partnerLinkType name="CreditCardBPEL">
+    <plnk:role name="CreditCardBPELProvider">
+      <plnk:portType name="client:CreditCardBPEL"/>
+    </plnk:role>
+  </plnk:partnerLinkType>
+  <wsdl:binding name="CreditCardBPELSOAP11Binding" type="client:CreditCardBPEL">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="process">
+      <soap:operation style="document" soapAction="http://validation.com/CardValidationSystem/CreditCardBPEL/process"/>
+      <wsdl:input>
+        <soap:body use="literal" parts="payload"/>
+        <soap:header part="payload" message="client:VendorMessage" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" parts="payload"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
 </wsdl:definitions>

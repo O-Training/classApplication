@@ -1,0 +1,37 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://http://validation.com/CardValidationSystem"
+            targetNamespace="http://http://validation.com/CardValidationSystem" elementFormDefault="qualified">
+  <xsd:element name="InputParameters">
+    <xsd:annotation>
+      <xsd:documentation>A sample element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="CardDetails">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="CC_Number" type="xsd:int"/>
+              <xsd:element name="Order_ID" type="xsd:int"/>
+              <xsd:element name="Cust_ID" type="xsd:int"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="OutputParameters">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="CardStatus">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="CC_Number" type="xsd:int"/>
+              <xsd:element name="Order_ID" type="xsd:int"/>
+              <xsd:element name="CC_Status" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

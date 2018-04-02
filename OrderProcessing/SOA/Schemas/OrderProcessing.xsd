@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.orderProcess.com/orderdetails"
+            targetNamespace="http://www.orderProcess.com/orderdetails" elementFormDefault="qualified">
+  <xsd:element name="InputParameters">
+    <xsd:annotation>
+      <xsd:documentation>A sample element</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="OrderDetails">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Card_Info">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="CC_Number" type="xsd:int"/>
+                    <xsd:element name="Vendor" type="xsd:string"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="Cust_Info">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Cust_ID" type="xsd:int"/>
+                    <xsd:element name="Cust_Name" type="xsd:string"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="Order_ID" type="xsd:int"/>
+              <xsd:element name="Item_Info" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Item_Name" type="xsd:string"/>
+                    <xsd:element name="Item_Cost" type="xsd:int"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="OutputParameters">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="OrderResponse">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Order_ID" type="xsd:int"/>
+              <xsd:element name="Cust_ID" type="xsd:int"/>
+              <xsd:element name="CC_Number" type="xsd:int"/>
+              <xsd:element name="CC_Status" type="xsd:string"/>
+              <xsd:element name="Order_Status" type="xsd:string"/>
+              <xsd:element name="Total_Amount" type="xsd:int"/>
+              <xsd:element name="Description" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

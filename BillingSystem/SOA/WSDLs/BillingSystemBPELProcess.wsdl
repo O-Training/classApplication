@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="BillingSystemBPELProcess"
+             targetNamespace="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:client="http://xmlns.oracle.com/Ankit_Assigment_App/BillingSystem/BillingSystemBPELProcess"
+             xmlns:ns1="http://www.products.com/Inventory/Design"
+             xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	TYPE DEFINITION - List of services participating in this BPEL process
+	The default output of the BPEL designer uses strings as input and 
+	output to the BPEL Process. But you can define or import any XML 
+	Schema type and use them as part of the message types.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->   
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://www.products.com/Inventory/Design" schemaLocation="../Schemas/BillingSystem.xsd" />
+		</schema>
+	</wsdl:types>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	MESSAGE TYPE DEFINITION - Definition of the message types used as 
+	part of the port type defintions
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->      
+	<wsdl:message name="BillingSystemBPELProcessRequestMessage">
+		<wsdl:part name="payload" element="ns1:InputParameters" />
+	</wsdl:message>
+
+	<wsdl:message name="BillingSystemBPELProcessResponseMessage">
+		<wsdl:part name="payload" element="ns1:OutputParameters" />
+	</wsdl:message>
+
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	PORT TYPE DEFINITION - A port type groups a set of operations into
+	a logical service unit.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- portType implemented by the BillingSystemBPELProcess BPEL process -->
+	<wsdl:portType name="BillingSystemBPELProcess">
+		<wsdl:operation name="process">
+			<wsdl:input message="client:BillingSystemBPELProcessRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- portType implemented by the requester of BillingSystemBPELProcess BPEL process
+	for asynchronous callback purposes
+	-->
+	<wsdl:portType name="BillingSystemBPELProcessCallback">
+		<wsdl:operation name="processResponse">
+			<wsdl:input message="client:BillingSystemBPELProcessResponseMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	PARTNER LINK TYPE DEFINITION
+	the BillingSystemBPELProcess partnerLinkType binds the provider and
+	requester portType into an asynchronous conversation.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<plnk:partnerLinkType name="BillingSystemBPELProcess">
+		<plnk:role name="BillingSystemBPELProcessProvider" portType="client:BillingSystemBPELProcess"/>
+		<plnk:role name="BillingSystemBPELProcessRequester" portType="client:BillingSystemBPELProcessCallback"/>
+	</plnk:partnerLinkType>
+</wsdl:definitions>

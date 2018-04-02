@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.Student.org"
+            targetNamespace="http://www.Student.org" elementFormDefault="qualified">
+  <xsd:element name="stuRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="stuName" type="xsd:string"/>
+        <xsd:element name="stuNum" type="xsd:integer"/>
+        <xsd:element name="marks">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="eng" type="xsd:integer"/>
+              <xsd:element name="hindi" type="xsd:integer"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="stuResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="stuName" type="xsd:string"/>
+        <xsd:element name="stuNum" type="xsd:integer"/>
+        <xsd:element name="totalMarks" type="xsd:integer"/>
+        <xsd:element name="result" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
